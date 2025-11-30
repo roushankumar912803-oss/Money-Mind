@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+  // process.cwd() works here because @types/node is installed.
   const env = loadEnv(mode, (process as any).cwd(), '');
 
   return {
@@ -12,7 +13,8 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
     },
     define: {
-      // This enables process.env.API_KEY to work in the browser code by replacing it at build time
+      // This enables process.env.API_KEY to work in the browser code by replacing it at build time.
+      // On Vercel, ensure you add API_KEY in the Project Settings > Environment Variables.
       'process.env.API_KEY': JSON.stringify(env.API_KEY),
     },
   };
